@@ -46,6 +46,10 @@ var ligatures = {
   "yours": "urs",
   "without": "w/o",
   "wait": "W8",
+  "AA": "Ꜳ",
+  "AE": "Æ",
+  "AV": "Ꜹ",
+  "CE": "Œ",
   "at": "@",
   "aa" :"ꜳ",
   "ae" :"æ",
@@ -71,28 +75,52 @@ var ligatures = {
   "qp" :"ȹ",
   "ts" :"ʦ",
   "tf" :"ʧ",
+  "lj" :"ǉ",
   // "ll" :"ỻ",
   "ll" :"ǁ",
+  "nj" :"ǌ",
   "th" :"ᵺ",
   "'n" :"ŉ",
+  "hu" :"ƕ",
+  "hv" :"ƕ",
   "?!" :"‽",
   "!?" :"‽"
 };
 
-var curr = $('#tweet-box-global')[0].children[0].innerText
-// var curr = "finally the aether, which is with me in florida, floods at last for you. Text your passwords later because it's great";
-var result = '';
+// document.addEventListener("DOMContentLoaded", function() {
+setTimeout(function() {
+  // Add the button to the Tweet Popup
+  var btnHTML = `<div id="slammer" class="btn primary-btn">Slam It</div>`;
+  $('.TweetBoxExtras.tweet-box-extras').append(btnHTML);
 
-// Go through each word first
-curr.split(' ').forEach(function(item, idx) {
-  result += ' ' + item.replace(/(\w+)(\W+)?/i, function(match, p1, p2) {
-    for (var key in ligatures) {p1 = p1.replace(key, ligatures[key]);}
-    return p2? p1 + p2: p1;
-  })
-});
+  // Add event listener for the button we created
+  $('#slammer').click(slammer);
 
-// Then go through the whole tweet and free space through punctuation
-result = result.replace(/with\s/, 'w/') // with me => w/me
-result = result.replace(/([,.?;:!])\s/g, '$1'); // Free space after punc.
-result = result.replace(/(?:'(\w))|(?:(\w)'\s)/g, '$1'); // remove ' in words
+// });
 
+  function slammer() {
+    var curr = $('#tweet-box-global')[0].children[0].innerText;
+    var result = '';
+
+    // Go through each word first
+    curr.split(' ').forEach(function(item, idx) {
+      result += item.replace(/(\w+)(\W+)?/i, function(match, p1, p2) {
+        for (var key in ligatures) {p1 = p1.toLowerCase().replace(key, ligatures[key]);}
+        return p2? p1 + p2: p1;
+      });
+      result += ' ';
+    });
+
+    // Then go through the whole tweet and free space through punctuation
+    result = result.replace(/with\s/, 'w/'); // with me => w/me
+    result = result.replace(/([,.?;:!])\s/g, '$1'); // Free space after punc.
+    result = result.replace(/(?:'(\w))|(?:(\w)'\s)/g, '$1'); // remove ' in words
+    result = result.replace(/(\w\.)(\w)/, function(m,p1,p2) {return p1 + p2.toUpperCase();}); // Uppercase new sentance
+    result = result.replace(/^\w/, function(m) {return m.toUpperCase();}); // Cap first letter
+
+    $('#tweet-box-global')[0].children[0].innerText = result;
+  }
+
+
+
+}, 5000);
