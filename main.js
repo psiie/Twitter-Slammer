@@ -29,7 +29,6 @@ var ligatures = {
   "yours": "urs",
   "you": "u",
   "without": "w/o",
-  "at": "@",
   "aa" :"ꜳ",
   "ae" :"æ",
   "av" :"ꜹ",
