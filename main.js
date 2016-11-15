@@ -1,70 +1,47 @@
 var ligatures = {
   "about": "~",
-  "because": "B/C",
+  "because": "b/c",
   "thanks": "THX",
   "great": "GR8",
   "later": "L8R",
   "wait": "W8",
   "your": "UR",
-  "cutie": "QT",
-  "today": "2DAY",
+  "today": "2day",
   "tonight": "2nite",
   "night": "nite",
   "light": "lite",
   "for": "4",
   "address": "ADR",
   "before": "B4",
-  "toilet": "WC",
-  "bathroom": "WC",
   "see": "C",
   "date": "D8",
-  "definitely": "DEF",
-  "doing": "doin",
+  "definitely": "def",
   "easy": "EZ",
-  "favourite": "FAV",
-  "favorite": "FAV",
-  "forward": "FWD",
   "hate": "H8",
-  "jelious": "JELLY",
-  "okay ok": "K",
-  "later": "L8R",
-  "minutes": "MINS",
-  "enough": "NUFF",
-  "pizza": "'ZA",
-  "please": "PLZ",
-  "computer windows": "PC",
-  "windows": "PC",
-  "password": "PW",
+  "please": "plz",
+  "computer": "PC",
   "are": "r",
   "sorry": "sry",
   "seriously": "srsly",
-  "straight": "STR8",
   "sucks": "sux",
   "text": "TXT",
   "twitter": "TWTR",
-  "you": "u",
   "yours": "urs",
+  "you": "u",
   "without": "w/o",
-  "wait": "W8",
-  "AA": "Ꜳ",
-  "AE": "Æ",
-  "AV": "Ꜹ",
-  "CE": "Œ",
   "at": "@",
   "aa" :"ꜳ",
   "ae" :"æ",
   "av" :"ꜹ",
   "oe" :"œ",
   "ue" :"ᵫ",
+  "ffl" :"ﬄ",
+  "ffi" :"ﬃ",
   "ff" :"ﬀ",
   "fl" :"ﬂ",
   "fi" :"ﬁ",
-  "ffi" :"ﬃ",
-  "ffl" :"ﬄ",
   "oo" :"ꝏ",
   "ft" :"ﬅ",
-  "fs" :"ß",
-  "fz" :"ß",
   "st" :"ﬆ",
   "db" :"ȸ",
   "dz" :"ʣ",
@@ -75,23 +52,26 @@ var ligatures = {
   "ts" :"ʦ",
   "tf" :"ʧ",
   "lj" :"ǉ",
-  // "ll" :"ỻ",
   "ll" :"ǁ",
   "nj" :"ǌ",
   "th" :"ᵺ",
-  // "'n" :"ŉ",
   "hu" :"ƕ",
-  "hv" :"ƕ"
-  // "?!" :"‽",
-  // "!?" :"‽"
 };
 
-var box1 = document.getElementById('tweet-box-home-timeline').children[0];
-var box2 = document.getElementById('tweet-box-global').children[0];
-var elem = box1;
+var specialLigatures = {
+  "'n" :"ŉ",
+  "?!" :"‽",
+  "!?" :"‽"
+}
+
+try {
+  var box2 = document.getElementById('tweet-box-global').children[0];
+  var box1 = document.getElementById('tweet-box-home-timeline').children[0];
+  var elem = box1;
+} catch(e){}
 
 // Switch boxes from home-timeline to global
-if (box1.innerText == "What’s happening?" || box1.length <= 1 ) {elem = box2;}
+if (!box1 || box1.innerText == "What’s happening?" || box1.length <= 1 ) {elem = box2;}
 
 
 // Add the function OFC
@@ -101,7 +81,11 @@ var slammer = function(element) {
 
   // Go through each word first
   curr.split(' ').forEach(function(item, idx) {
-    result += item.replace(/(\w+)(\W+)?/i, function(match, p1, p2) {
+    var modItem = item.replace(/.+/, function(match) {
+      for (var key in specialLigatures) {match = match.replace(key, specialLigatures[key]);}
+      return match;
+    });
+    result += modItem.replace(/(\w+)(\W+)?/i, function(match, p1, p2) {
       for (var key in ligatures) {p1 = p1.toLowerCase().replace(key, ligatures[key]);}
       return p2? p1 + p2: p1;
     });
@@ -121,19 +105,4 @@ var slammer = function(element) {
 // execute
 slammer(elem);
 
-
-
-
 // human + hv = ?! lists craft florida avenue yet ai'nt llama moot 13ft them.
-
-// // Create and add button
-// var btnHTML = document.createElement("div");
-// btnHTML.innerHTML = "Slam It!";
-// btnHTML.setAttribute('class', 'btn primary-btn slammer');
-// document.getElementsByClassName('TweetBoxExtras tweet-box-extras')[1]
-//         .appendChild(btnHTML);
-
-// // Add event listener
-// document.getElementsByClassName('slammer')[0].addEventListener('click', function(e) {
-//   console.log('clicked');
-// })
